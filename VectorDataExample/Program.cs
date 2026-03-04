@@ -37,37 +37,37 @@ for (int i = 0; i < articles.Length; i++)
 await collection.UpsertAsync(articles);
 Console.WriteLine($"✅ Загружено {articles.Length} статей в базу знаний\n");
 
-// --- Семантический поиск ---
-var queries = new[]
+Console.WriteLine("💡 Примеры запросов:");
+Console.WriteLine("   • забыл пароль от аккаунта");
+Console.WriteLine("   • хочу включить двухфакторную защиту");
+Console.WriteLine("   • оплата заказа картой");
+Console.WriteLine("   • как поменять email");
+Console.WriteLine("   • вернуть деньги за отменённый заказ");
+Console.WriteLine("\n💬 Введите запрос для поиска по базе знаний (или 'выход' для завершения):");
+
+while (true)
 {
-    "забыл пароль от аккаунта",
-    "хочу включить двухфакторную защиту",
-    "оплата заказа картой",
-};
+    Console.Write("\n> ");
+    var userInput = Console.ReadLine()?.Trim();
 
-foreach (var query in queries)
-{
-    Console.WriteLine($"🔍 Запрос: \"{query}\"");
+    if (string.IsNullOrEmpty(userInput))
+        continue;
 
-    var queryEmbedding = await embeddingGenerator.GenerateAsync([query]);
+    if (userInput.Equals("выход", StringComparison.OrdinalIgnoreCase) ||
+        userInput.Equals("exit", StringComparison.OrdinalIgnoreCase) ||
+        userInput.Equals("quit", StringComparison.OrdinalIgnoreCase))
+        break;
 
-    var results = collection.SearchAsync(queryEmbedding[0].Vector, top: 2);
-    await foreach (var result in results)
+    var userEmbedding = await embeddingGenerator.GenerateAsync([userInput]);
+    var userResults = collection.SearchAsync(userEmbedding[0].Vector, top: 3);
+
+    Console.WriteLine($"🔍 Результаты по запросу: \"{userInput}\"");
+    var found = false;
+    await foreach (var result in userResults)
     {
+        found = true;
         Console.WriteLine($"   [{result.Score:F2}] {result.Record.Title} — {result.Record.Text}");
     }
-    Console.WriteLine();
-}
-
-// --- Поиск с фильтром по категории ---
-Console.WriteLine("🎯 Поиск только по категории 'auth': \"проблема со входом в аккаунт\"");
-var filterQuery = await embeddingGenerator.GenerateAsync(["проблема со входом в аккаунт"]);
-var filteredResults = collection.SearchAsync(
-    filterQuery[0].Vector,
-    top: 3,
-    new VectorSearchOptions<KnowledgeArticle> { Filter = r => r.Category == "auth" });
-
-await foreach (var result in filteredResults)
-{
-    Console.WriteLine($"   [{result.Score:F2}] {result.Record.Title}");
+    if (!found)
+        Console.WriteLine("   Ничего не найдено.");
 }

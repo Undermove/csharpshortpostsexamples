@@ -7,6 +7,13 @@ obj/
 *.suo
 .vs/
 
+# Rider
+.idea/
+*.sln.iml
+
+# Secrets
+.env
+
 # NuGet
 *.nupkg
 
