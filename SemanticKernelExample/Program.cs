@@ -26,7 +26,7 @@ var githubToken = Environment.GetEnvironmentVariable("GITHUB_TOKEN")
 
 // --- Настройка SK ---
 var kernel = Kernel.CreateBuilder()
-    .AddOpenAIChatCompletion("gpt-4o", openAiKey)
+    .AddOpenAIChatCompletion("gpt-5-mini", openAiKey)
     .Build();
 
 // Регистрируем плагин — SK через рефлексию читает [KernelFunction] методы
