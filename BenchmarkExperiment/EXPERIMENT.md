@@ -45,18 +45,33 @@ Microsoft выпустила [`dotnet/skills`](https://github.com/dotnet/skills)
 
 Перезапусти сессию, дай тот же промпт, сравни результат.
 
-## Чеклист для оценки
+# Чеклист оценки BenchmarkDotNet-кода
 
-После каждого запуска проверь:
+Критерии взяты напрямую из [`microbenchmarking` SKILL.md](https://github.com/dotnet/skills/tree/main/plugins/dotnet-diag/skills/microbenchmarking).
 
-| # | Критерий | Ожидаемое значение |
+| # | Критерий | Почему важно |
 |---|---|---|
-| 1 | BDN версия в csproj | НЕТ хардкода — `dotnet add package BenchmarkDotNet` |
-| 2 | Return type benchmark-методов | `Task<GeneratedEmbeddings<Embedding<float>>>` (не `async Task void`) |
-| 3 | Allocation tracking | `GenerateSingle` показывает > 0 байт |
-| 4 | Структура проекта | `<ProjectReference>`, не `<Compile Include=...>` |
-| 5 | Build warnings | 0 |
-| 6 | Dry run | `dotnet run -c Release --project BenchmarkExperiment -- --job Dry --filter "*"` успешен |
+| 1 | BDN добавлен через `dotnet add package` (без версии) | Версии в training data устарели. `0.14.0` → нет поддержки net10.0 runtime features |
+| 2 | Benchmark-метод **возвращает** результат (`Task<T>`, не `async Task void`) | Dead code elimination: без return JIT может выкинуть вычисление. `[MemoryDiagnoser]` показывает 0 байт |
+| 3 | Allocation tracking работает (> 0 байт для бенчмарка с реальными аллокациями) | Верификация пункта 2 на практике — dry run не ловит эту ошибку |
+| 4 | Структура проекта: `<ProjectReference>` (не `<Compile Include=...>` хак) | Линковать исходники из другого проекта — хак. Ломается при переименовании, не учитывает зависимости |
+| 5 | 0 build warnings | Предупреждения о несовместимых версиях пакетов (NU1603) указывают на некорректный граф зависимостей |
+| 6 | `args` передан в `BenchmarkSwitcher.Run(args)` | Без `args` CLI-флаги (`--filter`, `--job`) молча игнорируются |
+| 7 | `[GlobalSetup]` для инициализации (не в теле метода) | Инициализация внутри benchmark-метода включается в измерение |
+
+## Результаты по запускам
+
+| | Человек без скилла | Человек с `csharp-scripts` | Copilot без скилла | Copilot с `microbenchmarking` |
+|---|---|---|---|---|
+| 1. BDN версия | ❌ `0.14.0` | ❌ `0.14.0` | ❌ `0.14.0` | ✅ `0.15.8` |
+| 2. Return type | ✅ | ✅ | ❌ | ✅ |
+| 3. Allocation tracking | ✅ | ✅ | ❌ 0 байт | ✅ 2.83 KB |
+| 4. ProjectReference | ❌ | ✅ | ❌ | ✅ |
+| 5. Build warnings | ❌ 2 | ✅ 0 | ❌ 2 | ✅ 0 |
+| 6. args передан | ✅ | ✅ | ✅ | ✅ |
+| 7. GlobalSetup | ✅ | ✅ | ✅ | ✅ |
+| **Итого** | **5/7** | **6/7** | **4/7** | **7/7** |
+
 
 ## Тихая ошибка (главная находка)
 
