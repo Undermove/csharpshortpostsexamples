@@ -1,0 +1,147 @@
+// Validating benchmarks:
+// ***** BenchmarkRunner: Start   *****
+// ***** Found 2 benchmark(s) in total *****
+// ***** Building 1 exe(s) in Parallel: Start   *****
+// start dotnet  restore /p:UseSharedCompilation=false /p:BuildInParallel=false /m:1 /p:Deterministic=true /p:Optimize=true /p:IntermediateOutputPath="/Users/dmitryafonchenko/repos/csharpshortpostsexamples/BenchmarkExperiment/bin/Release/net10.0/8604cd4b-bbfd-444b-838c-3882fdae46c8/obj/Release/net10.0/" /p:OutDir="/Users/dmitryafonchenko/repos/csharpshortpostsexamples/BenchmarkExperiment/bin/Release/net10.0/8604cd4b-bbfd-444b-838c-3882fdae46c8/bin/Release/net10.0/" /p:OutputPath="/Users/dmitryafonchenko/repos/csharpshortpostsexamples/BenchmarkExperiment/bin/Release/net10.0/8604cd4b-bbfd-444b-838c-3882fdae46c8/bin/Release/net10.0/" in /Users/dmitryafonchenko/repos/csharpshortpostsexamples/BenchmarkExperiment/bin/Release/net10.0/8604cd4b-bbfd-444b-838c-3882fdae46c8
+// command took 2.32 sec and exited with 0
+// start dotnet  build -c Release --no-restore /p:UseSharedCompilation=false /p:BuildInParallel=false /m:1 /p:Deterministic=true /p:Optimize=true /p:IntermediateOutputPath="/Users/dmitryafonchenko/repos/csharpshortpostsexamples/BenchmarkExperiment/bin/Release/net10.0/8604cd4b-bbfd-444b-838c-3882fdae46c8/obj/Release/net10.0/" /p:OutDir="/Users/dmitryafonchenko/repos/csharpshortpostsexamples/BenchmarkExperiment/bin/Release/net10.0/8604cd4b-bbfd-444b-838c-3882fdae46c8/bin/Release/net10.0/" /p:OutputPath="/Users/dmitryafonchenko/repos/csharpshortpostsexamples/BenchmarkExperiment/bin/Release/net10.0/8604cd4b-bbfd-444b-838c-3882fdae46c8/bin/Release/net10.0/" --output "/Users/dmitryafonchenko/repos/csharpshortpostsexamples/BenchmarkExperiment/bin/Release/net10.0/8604cd4b-bbfd-444b-838c-3882fdae46c8/bin/Release/net10.0/" in /Users/dmitryafonchenko/repos/csharpshortpostsexamples/BenchmarkExperiment/bin/Release/net10.0/8604cd4b-bbfd-444b-838c-3882fdae46c8
+// command took 12.06 sec and exited with 0
+// ***** Done, took 00:00:33 (33.65 sec)   *****
+// Found 2 benchmarks:
+//   EmbeddingGeneratorBenchmarks.'1 строка': Dry(IterationCount=1, LaunchCount=1, RunStrategy=ColdStart, UnrollFactor=1, WarmupCount=1)
+//   EmbeddingGeneratorBenchmarks.'10 строк': Dry(IterationCount=1, LaunchCount=1, RunStrategy=ColdStart, UnrollFactor=1, WarmupCount=1)
+
+// **************************
+// Benchmark: EmbeddingGeneratorBenchmarks.'1 строка': Dry(IterationCount=1, LaunchCount=1, RunStrategy=ColdStart, UnrollFactor=1, WarmupCount=1)
+// *** Execute ***
+// Launch: 1 / 1
+// Execute: dotnet 8604cd4b-bbfd-444b-838c-3882fdae46c8.dll --anonymousPipes 110 117 --benchmarkName BenchmarkExperiment.EmbeddingGeneratorBenchmarks.GenerateSingle --job Dry --benchmarkId 0 in /Users/dmitryafonchenko/repos/csharpshortpostsexamples/BenchmarkExperiment/bin/Release/net10.0/8604cd4b-bbfd-444b-838c-3882fdae46c8/bin/Release/net10.0
+// Failed to set up high priority (Permission denied). In order to run benchmarks with high priority, make sure you have the right permissions.
+// BeforeAnythingElse
+
+// Benchmark Process Environment Information:
+// BenchmarkDotNet v0.14.0
+// Runtime=.NET 10.0.0 (10.0.25.52411), Arm64 RyuJIT AdvSIMD
+// GC=Concurrent Workstation
+// HardwareIntrinsics=AdvSIMD,AES,CRC32,DP,RDM,SHA1,SHA256 VectorSize=128
+// Job: Dry(IterationCount=1, LaunchCount=1, RunStrategy=ColdStart, UnrollFactor=1, WarmupCount=1)
+
+// BeforeActualRun
+WorkloadActual   1: 1 op, 8222959.00 ns, 8.2230 ms/op
+
+// AfterActualRun
+WorkloadResult   1: 1 op, 8222959.00 ns, 8.2230 ms/op
+// GC:  0 0 0 3640 1
+// Threading:  0 0 1
+
+// AfterAll
+// Benchmark Process 54270 has exited with code 0.
+
+Mean = 8.223 ms, StdErr = 0.000 ms (0.00%), N = 1, StdDev = 0.000 ms
+Min = 8.223 ms, Q1 = 8.223 ms, Median = 8.223 ms, Q3 = 8.223 ms, Max = 8.223 ms
+IQR = 0.000 ms, LowerFence = 8.223 ms, UpperFence = 8.223 ms
+ConfidenceInterval = [NaN ms; NaN ms] (CI 99.9%), Margin = NaN ms (NaN% of Mean)
+Skewness = NaN, Kurtosis = NaN, MValue = 2
+
+// ** Remained 1 (50,0 %) benchmark(s) to run. Estimated finish 2026-03-10 17:28 (0h 0m from now) **
+// **************************
+// Benchmark: EmbeddingGeneratorBenchmarks.'10 строк': Dry(IterationCount=1, LaunchCount=1, RunStrategy=ColdStart, UnrollFactor=1, WarmupCount=1)
+// *** Execute ***
+// Launch: 1 / 1
+// Execute: dotnet 8604cd4b-bbfd-444b-838c-3882fdae46c8.dll --anonymousPipes 110 117 --benchmarkName BenchmarkExperiment.EmbeddingGeneratorBenchmarks.GenerateTen --job Dry --benchmarkId 1 in /Users/dmitryafonchenko/repos/csharpshortpostsexamples/BenchmarkExperiment/bin/Release/net10.0/8604cd4b-bbfd-444b-838c-3882fdae46c8/bin/Release/net10.0
+// Failed to set up high priority (Permission denied). In order to run benchmarks with high priority, make sure you have the right permissions.
+// BeforeAnythingElse
+
+// Benchmark Process Environment Information:
+// BenchmarkDotNet v0.14.0
+// Runtime=.NET 10.0.0 (10.0.25.52411), Arm64 RyuJIT AdvSIMD
+// GC=Concurrent Workstation
+// HardwareIntrinsics=AdvSIMD,AES,CRC32,DP,RDM,SHA1,SHA256 VectorSize=128
+// Job: Dry(IterationCount=1, LaunchCount=1, RunStrategy=ColdStart, UnrollFactor=1, WarmupCount=1)
+
+// BeforeActualRun
+WorkloadActual   1: 1 op, 10205875.00 ns, 10.2059 ms/op
+
+// AfterActualRun
+WorkloadResult   1: 1 op, 10205875.00 ns, 10.2059 ms/op
+// GC:  0 0 0 26536 1
+// Threading:  0 0 1
+
+// AfterAll
+// Benchmark Process 54271 has exited with code 0.
+
+Mean = 10.206 ms, StdErr = 0.000 ms (0.00%), N = 1, StdDev = 0.000 ms
+Min = 10.206 ms, Q1 = 10.206 ms, Median = 10.206 ms, Q3 = 10.206 ms, Max = 10.206 ms
+IQR = 0.000 ms, LowerFence = 10.206 ms, UpperFence = 10.206 ms
+ConfidenceInterval = [NaN ms; NaN ms] (CI 99.9%), Margin = NaN ms (NaN% of Mean)
+Skewness = NaN, Kurtosis = NaN, MValue = 2
+
+// ** Remained 0 (0,0 %) benchmark(s) to run. Estimated finish 2026-03-10 17:28 (0h 0m from now) **
+// ***** BenchmarkRunner: Finish  *****
+
+// * Export *
+  BenchmarkDotNet.Artifacts/results/BenchmarkExperiment.EmbeddingGeneratorBenchmarks-report.csv
+  BenchmarkDotNet.Artifacts/results/BenchmarkExperiment.EmbeddingGeneratorBenchmarks-report-github.md
+  BenchmarkDotNet.Artifacts/results/BenchmarkExperiment.EmbeddingGeneratorBenchmarks-report.html
+
+// * Detailed results *
+EmbeddingGeneratorBenchmarks.'1 строка': Dry(IterationCount=1, LaunchCount=1, RunStrategy=ColdStart, UnrollFactor=1, WarmupCount=1)
+Runtime = .NET 10.0.0 (10.0.25.52411), Arm64 RyuJIT AdvSIMD; GC = Concurrent Workstation
+Mean = 8.223 ms, StdErr = 0.000 ms (0.00%), N = 1, StdDev = 0.000 ms
+Min = 8.223 ms, Q1 = 8.223 ms, Median = 8.223 ms, Q3 = 8.223 ms, Max = 8.223 ms
+IQR = 0.000 ms, LowerFence = 8.223 ms, UpperFence = 8.223 ms
+ConfidenceInterval = [NaN ms; NaN ms] (CI 99.9%), Margin = NaN ms (NaN% of Mean)
+Skewness = NaN, Kurtosis = NaN, MValue = 2
+-------------------- Histogram --------------------
+[8.223 ms ; 8.223 ms) | @
+---------------------------------------------------
+
+EmbeddingGeneratorBenchmarks.'10 строк': Dry(IterationCount=1, LaunchCount=1, RunStrategy=ColdStart, UnrollFactor=1, WarmupCount=1)
+Runtime = .NET 10.0.0 (10.0.25.52411), Arm64 RyuJIT AdvSIMD; GC = Concurrent Workstation
+Mean = 10.206 ms, StdErr = 0.000 ms (0.00%), N = 1, StdDev = 0.000 ms
+Min = 10.206 ms, Q1 = 10.206 ms, Median = 10.206 ms, Q3 = 10.206 ms, Max = 10.206 ms
+IQR = 0.000 ms, LowerFence = 10.206 ms, UpperFence = 10.206 ms
+ConfidenceInterval = [NaN ms; NaN ms] (CI 99.9%), Margin = NaN ms (NaN% of Mean)
+Skewness = NaN, Kurtosis = NaN, MValue = 2
+-------------------- Histogram --------------------
+[10.206 ms ; 10.206 ms) | @
+---------------------------------------------------
+
+// * Summary *
+
+BenchmarkDotNet v0.14.0, macOS 26.2 (25C56) [Darwin 25.2.0]
+Apple M4 2.40GHz, 1 CPU, 10 logical and 10 physical cores
+.NET SDK 10.0.100
+  [Host] : .NET 10.0.0 (10.0.25.52411), Arm64 RyuJIT AdvSIMD
+  Dry    : .NET 10.0.0 (10.0.25.52411), Arm64 RyuJIT AdvSIMD
+
+Job=Dry  IterationCount=1  LaunchCount=1  
+RunStrategy=ColdStart  UnrollFactor=1  WarmupCount=1  
+
+| Method     | Mean      | Error | Ratio | Allocated | Alloc Ratio |
+|----------- |----------:|------:|------:|----------:|------------:|
+| '1 строка' |  8.223 ms |    NA |  1.00 |         - |          NA |
+| '10 строк' | 10.206 ms |    NA |  1.24 |   26536 B |          NA |
+
+// * Warnings *
+MinIterationTime
+  EmbeddingGeneratorBenchmarks.'1 строка': Dry -> The minimum observed iteration time is 8.223ms which is very small. It's recommended to increase it to at least 100ms using more operations.
+  EmbeddingGeneratorBenchmarks.'10 строк': Dry -> The minimum observed iteration time is 10.206ms which is very small. It's recommended to increase it to at least 100ms using more operations.
+
+// * Legends *
+  Mean        : Arithmetic mean of all measurements
+  Error       : Half of 99.9% confidence interval
+  Ratio       : Mean of the ratio distribution ([Current]/[Baseline])
+  Allocated   : Allocated memory per single operation (managed only, inclusive, 1KB = 1024B)
+  Alloc Ratio : Allocated memory ratio distribution ([Current]/[Baseline])
+  1 ms        : 1 Millisecond (0.001 sec)
+
+// * Diagnostic Output - MemoryDiagnoser *
+
+
+// ***** BenchmarkRunner: End *****
+Run time: 00:00:00 (0.46 sec), executed benchmarks: 2
+
+Global total time: 00:00:34 (34.72 sec), executed benchmarks: 2
+// * Artifacts cleanup *
+Artifacts cleanup is finished

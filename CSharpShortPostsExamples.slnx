@@ -4,6 +4,7 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Project Path="BenchmarkExperiment/BenchmarkExperiment.csproj" />
   <Project Path="SemanticKernelExample/SemanticKernelExample.csproj" />
   <Project Path="VectorDataExample/VectorDataExample.csproj" />
 </Solution>
