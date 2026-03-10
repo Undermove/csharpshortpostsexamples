@@ -6,4 +6,5 @@
   </Configurations>
   <Project Path="SemanticKernelExample/SemanticKernelExample.csproj" />
   <Project Path="VectorDataExample/VectorDataExample.csproj" />
+  <Project Path="BenchmarkExperiment/BenchmarkExperiment.csproj" />
 </Solution>
