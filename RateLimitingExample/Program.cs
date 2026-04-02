@@ -1,42 +1,62 @@
 using System.Globalization;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
+using RateLimitingExample;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var mysqlConnectionString = builder.Configuration.GetConnectionString("MySQL");
+
 builder.Services.AddRateLimiter(options =>
 {
-    // Глобальный лимитер — отдельное ведро токенов на каждого юзера
-    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(ctx =>
-        RateLimitPartition.GetTokenBucketLimiter(
-            partitionKey: ctx.User.Identity?.Name
-                          ?? ctx.Connection.RemoteIpAddress?.ToString()
-                          ?? "anonymous",
-            factory: _ => new TokenBucketRateLimiterOptions
-            {
-                TokenLimit = 20,
-                ReplenishmentPeriod = TimeSpan.FromMinutes(1),
-                TokensPerPeriod = 5
-            }));
-
-    // Жёсткий лимит для эндпоинтов с LLM
-    options.AddTokenBucketLimiter("llm-ask", opt =>
+    if (!string.IsNullOrEmpty(mysqlConnectionString))
     {
-        opt.TokenLimit = 10;
-        opt.ReplenishmentPeriod = TimeSpan.FromMinutes(1);
-        opt.TokensPerPeriod = 2;
-    });
+        // Распределённый лимитер через MySQL — счётчик общий на все поды
+        options.AddMySqlFixedWindowLimiter("llm-ask", opt =>
+        {
+            opt.ConnectionString = mysqlConnectionString;
+            opt.PermitLimit = 10;
+            opt.Window = TimeSpan.FromMinutes(1);
+        });
 
-    // Мягкий лимит для обычных эндпоинтов
-    options.AddFixedWindowLimiter("general", opt =>
+        options.AddMySqlFixedWindowLimiter("general", opt =>
+        {
+            opt.ConnectionString = mysqlConnectionString;
+            opt.PermitLimit = 100;
+            opt.Window = TimeSpan.FromMinutes(1);
+        });
+    }
+    else
     {
-        opt.PermitLimit = 100;
-        opt.Window = TimeSpan.FromMinutes(1);
-    });
+        // In-memory лимитеры — работают в рамках одного процесса
+        options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(ctx =>
+            RateLimitPartition.GetTokenBucketLimiter(
+                partitionKey: ctx.User.Identity?.Name
+                              ?? ctx.Connection.RemoteIpAddress?.ToString()
+                              ?? "anonymous",
+                factory: _ => new TokenBucketRateLimiterOptions
+                {
+                    TokenLimit = 20,
+                    ReplenishmentPeriod = TimeSpan.FromMinutes(1),
+                    TokensPerPeriod = 5
+                }));
+
+        options.AddTokenBucketLimiter("llm-ask", opt =>
+        {
+            opt.TokenLimit = 10;
+            opt.ReplenishmentPeriod = TimeSpan.FromMinutes(1);
+            opt.TokensPerPeriod = 2;
+        });
+
+        options.AddFixedWindowLimiter("general", opt =>
+        {
+            opt.PermitLimit = 100;
+            opt.Window = TimeSpan.FromMinutes(1);
+        });
+    }
 
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
-    // Красивый ответ при превышении лимита
     options.OnRejected = async (context, token) =>
     {
         context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
@@ -59,7 +79,6 @@ app.UseRateLimiter();
 // Эндпоинт с LLM — жёсткий лимит
 app.MapPost("/ask", (QuestionRequest request) =>
 {
-    // Тут был бы вызов LLM, но для примера просто эхо
     return Results.Ok(new { answer = $"Ответ на вопрос: {request.Question}" });
 }).RequireRateLimiting("llm-ask");
 
