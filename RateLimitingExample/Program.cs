@@ -77,10 +77,9 @@ var app = builder.Build();
 app.UseRateLimiter();
 
 // Эндпоинт с LLM — жёсткий лимит
-app.MapPost("/ask", (QuestionRequest request) =>
-{
-    return Results.Ok(new { answer = $"Ответ на вопрос: {request.Question}" });
-}).RequireRateLimiting("llm-ask");
+app.MapPost("/ask", (QuestionRequest request) => 
+        Results.Ok(new { answer = $"Ответ на вопрос: {request.Question}" }))
+    .RequireRateLimiting("llm-ask");
 
 // Обычный эндпоинт — мягкий лимит
 app.MapGet("/articles", () =>
