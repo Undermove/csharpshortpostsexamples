@@ -7,4 +7,5 @@
   <Project Path="SemanticKernelExample/SemanticKernelExample.csproj" />
   <Project Path="VectorDataExample/VectorDataExample.csproj" />
   <Project Path="RateLimitingExample/RateLimitingExample.csproj" />
+  <Project Path="AgentFrameworkExample/AgentFrameworkExample.csproj" />
 </Solution>
