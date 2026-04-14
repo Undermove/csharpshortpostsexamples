@@ -46,8 +46,8 @@ AIAgent agent = chatClient.AsAIAgent(
         """,
     tools: githubTools.AsTools());
 
-// --- Запускаем — при передаче null в session агент сам создаст сессию ---
-AgentSession? session = null;
+// --- Создаём сессию один раз — она хранит историю переписки ---
+var session = await agent.CreateSessionAsync();
 
 Console.WriteLine("🤖 GitHub Agent запущен (Agent Framework). Что нужно сделать?");
 Console.WriteLine();
