@@ -79,7 +79,7 @@ public sealed class MySqlFixedWindowRateLimiter(
             INSERT INTO rate_limit_counters (partition_key, window_id, request_count, expires_at)
             VALUES (@key, @windowId, 1, @expiresAt)
             ON DUPLICATE KEY UPDATE
-                request_count = LAST_INSERT_ID(IF(expires_at <= NOW(3), 1, request_count + 1)),
+                request_count =  (IF(expires_at <= NOW(3), 1, request_count + 1)),
                 expires_at    = IF(expires_at <= NOW(3), @expiresAt, expires_at)
             """, conn);
         upsertCmd.Parameters.AddWithValue("@key", partitionKey);
