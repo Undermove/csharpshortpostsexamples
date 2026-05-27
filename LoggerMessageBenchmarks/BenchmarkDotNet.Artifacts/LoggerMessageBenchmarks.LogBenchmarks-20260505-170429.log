@@ -1,0 +1,78 @@
+// Validating benchmarks:
+// ***** BenchmarkRunner: Start   *****
+// ***** Found 8 benchmark(s) in total *****
+// ***** Building 1 exe(s) in Parallel: Start   *****
+// start dotnet  restore /p:UseSharedCompilation=false /p:BuildInParallel=false /m:1 /p:Deterministic=true /p:Optimize=true /p:IntermediateOutputPath="/Users/dmitryafonchenko/repos/csharpshortpostsexamples/LoggerMessageBenchmarks/bin/Release/net10.0/d7b915a0-f1a3-4533-86c1-22695975baa2/obj/Release/net10.0/" /p:OutDir="/Users/dmitryafonchenko/repos/csharpshortpostsexamples/LoggerMessageBenchmarks/bin/Release/net10.0/d7b915a0-f1a3-4533-86c1-22695975baa2/bin/Release/net10.0/" /p:OutputPath="/Users/dmitryafonchenko/repos/csharpshortpostsexamples/LoggerMessageBenchmarks/bin/Release/net10.0/d7b915a0-f1a3-4533-86c1-22695975baa2/bin/Release/net10.0/" in /Users/dmitryafonchenko/repos/csharpshortpostsexamples/LoggerMessageBenchmarks/bin/Release/net10.0/d7b915a0-f1a3-4533-86c1-22695975baa2
+// command took 0.47 sec and exited with 0
+// start dotnet  build -c Release --no-restore /p:UseSharedCompilation=false /p:BuildInParallel=false /m:1 /p:Deterministic=true /p:Optimize=true /p:IntermediateOutputPath="/Users/dmitryafonchenko/repos/csharpshortpostsexamples/LoggerMessageBenchmarks/bin/Release/net10.0/d7b915a0-f1a3-4533-86c1-22695975baa2/obj/Release/net10.0/" /p:OutDir="/Users/dmitryafonchenko/repos/csharpshortpostsexamples/LoggerMessageBenchmarks/bin/Release/net10.0/d7b915a0-f1a3-4533-86c1-22695975baa2/bin/Release/net10.0/" /p:OutputPath="/Users/dmitryafonchenko/repos/csharpshortpostsexamples/LoggerMessageBenchmarks/bin/Release/net10.0/d7b915a0-f1a3-4533-86c1-22695975baa2/bin/Release/net10.0/" --output "/Users/dmitryafonchenko/repos/csharpshortpostsexamples/LoggerMessageBenchmarks/bin/Release/net10.0/d7b915a0-f1a3-4533-86c1-22695975baa2/bin/Release/net10.0/" in /Users/dmitryafonchenko/repos/csharpshortpostsexamples/LoggerMessageBenchmarks/bin/Release/net10.0/d7b915a0-f1a3-4533-86c1-22695975baa2
+// command took 1.17 sec and exited with 1
+// ***** Done, took 00:00:08 (8.68 sec)   *****
+// Found 8 benchmarks:
+//   LogBenchmarks.'interpolated $"..."': DefaultJob
+//   LogBenchmarks.'templated "{X}", args': DefaultJob
+//   LogBenchmarks.LoggerMessage.Define: DefaultJob
+//   LogBenchmarks.'[LoggerMessage] sourcegen': DefaultJob
+//   LogBenchmarks.'interpolated $"..."': DefaultJob
+//   LogBenchmarks.'templated "{X}", args': DefaultJob
+//   LogBenchmarks.LoggerMessage.Define: DefaultJob
+//   LogBenchmarks.'[LoggerMessage] sourcegen': DefaultJob
+
+// Build Error: Standard output: 
+  
+ Standard error: 
+ /Users/dmitryafonchenko/repos/csharpshortpostsexamples/LoggerMessageBenchmarks/Generated/Microsoft.Extensions.Logging.Generators/Microsoft.Extensions.Logging.Generators.LoggerMessageGenerator/LoggerMessage.g.cs(13,36): error CS0757: A partial method may not have multiple implementing declarations [/Users/dmitryafonchenko/repos/csharpshortpostsexamples/LoggerMessageBenchmarks/LoggerMessageBenchmarks.csproj]
+/Users/dmitryafonchenko/repos/csharpshortpostsexamples/LoggerMessageBenchmarks/Generated/Microsoft.Extensions.Logging.Generators/Microsoft.Extensions.Logging.Generators.LoggerMessageGenerator/LoggerMessage.g.cs(9,198): error CS0102: The type 'LogMessages' already contains a definition for '__UserActionGenCallback' [/Users/dmitryafonchenko/repos/csharpshortpostsexamples/LoggerMessageBenchmarks/LoggerMessageBenchmarks.csproj]
+Build FAILED.
+/Users/dmitryafonchenko/repos/csharpshortpostsexamples/LoggerMessageBenchmarks/Generated/Microsoft.Extensions.Logging.Generators/Microsoft.Extensions.Logging.Generators.LoggerMessageGenerator/LoggerMessage.g.cs(13,36): error CS0757: A partial method may not have multiple implementing declarations [/Users/dmitryafonchenko/repos/csharpshortpostsexamples/LoggerMessageBenchmarks/LoggerMessageBenchmarks.csproj]
+/Users/dmitryafonchenko/repos/csharpshortpostsexamples/LoggerMessageBenchmarks/Generated/Microsoft.Extensions.Logging.Generators/Microsoft.Extensions.Logging.Generators.LoggerMessageGenerator/LoggerMessage.g.cs(9,198): error CS0102: The type 'LogMessages' already contains a definition for '__UserActionGenCallback' [/Users/dmitryafonchenko/repos/csharpshortpostsexamples/LoggerMessageBenchmarks/LoggerMessageBenchmarks.csproj]
+    0 Warning(s)
+    2 Error(s)
+Time Elapsed 00:00:01.05
+
+// BenchmarkDotNet has failed to build the auto-generated boilerplate code.
+// It can be found in /Users/dmitryafonchenko/repos/csharpshortpostsexamples/LoggerMessageBenchmarks/bin/Release/net10.0/d7b915a0-f1a3-4533-86c1-22695975baa2
+// Please follow the troubleshooting guide: https://benchmarkdotnet.org/articles/guides/troubleshooting.html
+
+// ** Remained 0 (0,0 %) benchmark(s) to run. Estimated finish 2026-05-05 17:04 (0h 0m from now) **
+// ***** BenchmarkRunner: Finish  *****
+
+// * Export *
+  BenchmarkDotNet.Artifacts/results/LoggerMessageBenchmarks.LogBenchmarks-report.csv
+  BenchmarkDotNet.Artifacts/results/LoggerMessageBenchmarks.LogBenchmarks-report-github.md
+  BenchmarkDotNet.Artifacts/results/LoggerMessageBenchmarks.LogBenchmarks-report.html
+
+// * Detailed results *
+LogBenchmarks.'interpolated $"..."': DefaultJob
+Runtime = ; GC = 
+There are not any results runs
+
+// * Summary *
+
+BenchmarkDotNet v0.14.0, macOS 26.2 (25C56) [Darwin 25.2.0]
+Apple M4, 1 CPU, 10 logical and 10 physical cores
+.NET SDK 10.0.100
+  [Host] : .NET 10.0.0 (10.0.25.52411), Arm64 RyuJIT AdvSIMD
+
+Categories=Disabled  
+
+| Method                | Mean | Error |
+|---------------------- |-----:|------:|
+| 'interpolated $"..."' |   NA |    NA |
+
+Benchmarks with issues:
+  LogBenchmarks.'interpolated $"..."': DefaultJob
+
+// * Legends *
+  Mean  : Arithmetic mean of all measurements
+  Error : Half of 99.9% confidence interval
+  1 ns  : 1 Nanosecond (0.000000001 sec)
+
+// * Diagnostic Output - MemoryDiagnoser *
+
+
+// ***** BenchmarkRunner: End *****
+Run time: 00:00:00 (0.01 sec), executed benchmarks: 0
+
+Global total time: 00:00:08 (8.9 sec), executed benchmarks: 0
+// * Artifacts cleanup *
+Artifacts cleanup is finished

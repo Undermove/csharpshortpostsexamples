@@ -8,4 +8,6 @@
   <Project Path="VectorDataExample/VectorDataExample.csproj" />
   <Project Path="RateLimitingExample/RateLimitingExample.csproj" />
   <Project Path="AgentFrameworkExample/AgentFrameworkExample.csproj" />
+  <Project Path="LoggerMessageBenchmarks/LoggerMessageBenchmarks.csproj" />
+  <Project Path="IAsyncEnumerableExample/IAsyncEnumerableExample.csproj" />
 </Solution>

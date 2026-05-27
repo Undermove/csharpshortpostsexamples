@@ -1,0 +1,27 @@
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: knowledgebase
+      MYSQL_DATABASE: knowledgebase
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      retries: 10
+
+  app:
+    build: .
+    ports:
+      - "5005:8080"
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__MySQL=Server=mysql;Database=knowledgebase;User=root;Password=knowledgebase
+      # Сколько статей по ~234 КБ засидить (по умолчанию 500 ≈ 117 МБ данных)
+      - ARTICLE_COUNT=500
+      # Ограничим контейнер по памяти, чтобы «буферная» ручка честно упёрлась в потолок
+    mem_limit: 512m
+    depends_on:
+      mysql:
+        condition: service_healthy

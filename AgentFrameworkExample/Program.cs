@@ -29,6 +29,17 @@ var chatClient = new OpenAIClient(openAiKey)
 
 var githubTools = new GitHubTools(githubToken);
 
+// Как сделать историю сессий не ин-мемори
+// var agent = chatClient.AsAIAgent(new ChatClientAgentOptions                                                                                      
+// {                                                               
+//     ChatHistoryProvider = new MyPostgresChatHistoryProvider(connectionString),
+//     ChatOptions = new ChatOptions                                                                                                                
+//     {                                                                                                                                            
+//         Tools = githubTools.AsTools(),                                                                                                           
+//         Instructions = "..."                                                                                                                     
+//     },                                                                                                                                           
+//     Name = "GitHubAgent"
+// }); 
 AIAgent agent = chatClient.AsAIAgent(
     name: "GitHubAgent",
     instructions: """
