@@ -10,4 +10,5 @@
   <Project Path="AgentFrameworkExample/AgentFrameworkExample.csproj" />
   <Project Path="LoggerMessageBenchmarks/LoggerMessageBenchmarks.csproj" />
   <Project Path="IAsyncEnumerableExample/IAsyncEnumerableExample.csproj" />
+  <Project Path="HttpQueryExample/HttpQueryExample.csproj" />
 </Solution>
