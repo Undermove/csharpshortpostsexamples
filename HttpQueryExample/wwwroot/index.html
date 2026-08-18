@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QUERY /products/search — демо HTTP QUERY на .NET 10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #141a22;
+    --panel-2: #10151c;
+    --line: #232c38;
+    --text: #e8eef5;
+    --dim: #8494a7;
+    --lime: #b6f527;
+    --lime-dark: #86bd0d;
+    --amber: #ffb224;
+    --red: #ff5d5d;
+    --violet: #b18cff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Golos Text", sans-serif;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse 60% 40% at 70% -10%, rgba(182, 245, 39, .07), transparent),
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 100% 100%, 44px 44px, 44px 44px;
+    background-position: 0 0, -1px -1px, -1px -1px;
+  }
+  #root { max-width: 1180px; margin: 0 auto; padding: 40px 24px 64px; }
+
+  .masthead { margin-bottom: 36px; }
+  .masthead .kicker {
+    font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: .18em;
+    color: var(--lime); text-transform: uppercase; margin-bottom: 10px;
+  }
+  .masthead h1 {
+    font-family: "Unbounded", sans-serif; font-weight: 800;
+    font-size: clamp(26px, 4.4vw, 46px); line-height: 1.05; letter-spacing: -.01em;
+  }
+  .masthead h1 .path { color: var(--dim); font-weight: 400; }
+  .masthead .sub { color: var(--dim); margin-top: 12px; max-width: 640px; line-height: 1.55; }
+  .masthead .sub b { color: var(--text); font-weight: 600; }
+
+  .layout { display: grid; grid-template-columns: 1fr 400px; gap: 20px; align-items: start; }
+  @media (max-width: 940px) { .layout { grid-template-columns: 1fr; } }
+
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; }
+  .panel-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 14px 18px; border-bottom: 1px solid var(--line);
+    font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--dim);
+  }
+  .panel-body { padding: 18px; }
+
+  .search-row { display: flex; gap: 10px; margin-bottom: 14px; }
+  input[type="text"] {
+    flex: 1; background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px;
+    color: var(--text); font: 500 15px "Golos Text", sans-serif; padding: 12px 14px; outline: none;
+    transition: border-color .15s;
+  }
+  input[type="text"]:focus { border-color: var(--lime-dark); }
+  input[type="text"]::placeholder { color: #55647a; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .chip {
+    font: 500 13px "Golos Text", sans-serif; color: var(--dim);
+    background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px;
+    padding: 7px 14px; cursor: pointer; transition: all .15s; user-select: none;
+  }
+  .chip:hover { color: var(--text); border-color: #3a4757; }
+  .chip.on { color: #0d1117; background: var(--lime); border-color: var(--lime); font-weight: 600; }
+
+  .price-row { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; }
+  .price-row label { font-size: 13px; color: var(--dim); white-space: nowrap; }
+  .price-row .val { font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--lime); min-width: 64px; text-align: right; }
+  input[type="range"] { flex: 1; accent-color: var(--lime); }
+
+  .waf {
+    display: flex; align-items: center; gap: 12px; margin-top: 16px; padding: 13px 15px;
+    background: var(--panel-2); border: 1px dashed var(--line); border-radius: 10px; cursor: pointer;
+    transition: border-color .2s; user-select: none;
+  }
+  .waf.on { border-color: var(--red); background: rgba(255, 93, 93, .06); }
+  .waf .light { width: 10px; height: 10px; border-radius: 50%; background: #3a4757; flex: none; transition: all .2s; }
+  .waf.on .light { background: var(--red); box-shadow: 0 0 10px var(--red); }
+  .waf .t { font-size: 13.5px; line-height: 1.45; color: var(--dim); }
+  .waf.on .t { color: var(--text); }
+  .waf .t b { font-weight: 600; color: var(--text); }
+
+  .results { margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
+  .card {
+    background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 14px 15px;
+    animation: pop .25s ease both;
+  }
+  @keyframes pop { from { opacity: 0; transform: translateY(6px); } }
+  .card .cat { font-family: "JetBrains Mono", monospace; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--violet); margin-bottom: 7px; }
+  .card .name { font-weight: 600; font-size: 14.5px; line-height: 1.35; margin-bottom: 9px; }
+  .card .price { font-family: "JetBrains Mono", monospace; font-size: 14px; color: var(--lime); }
+  .empty { color: var(--dim); padding: 26px 4px; font-size: 14px; }
+
+  .log { max-height: 560px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 14px; }
+  .entry {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 8px 10px; align-items: center;
+    background: var(--panel-2); border: 1px solid var(--line); border-left-width: 3px;
+    border-radius: 10px; padding: 10px 12px; animation: pop .25s ease both;
+    font-family: "JetBrains Mono", monospace; font-size: 12px;
+  }
+  .entry.ok { border-left-color: var(--lime); }
+  .entry.blocked { border-left-color: var(--red); }
+  .entry.fallback { border-left-color: var(--amber); }
+  .badge { font-weight: 700; font-size: 11px; letter-spacing: .06em; border-radius: 6px; padding: 3px 8px; }
+  .badge.QUERY { color: #0d1117; background: var(--lime); }
+  .badge.POST { color: #0d1117; background: var(--amber); }
+  .entry .meta { color: var(--dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .entry .status { font-weight: 600; }
+  .entry .status.s200 { color: var(--lime); }
+  .entry .status.s405 { color: var(--red); }
+  .entry .note { grid-column: 1 / -1; color: var(--dim); font-family: "Golos Text", sans-serif; font-size: 12.5px; line-height: 1.45; }
+  .entry .note b { color: var(--amber); font-weight: 600; }
+  .log-empty { color: #55647a; font-family: "JetBrains Mono", monospace; font-size: 12px; padding: 22px 6px; }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="module">
+import React, { useState, useRef, useEffect } from 'https://esm.sh/react@19.1.0';
+import { createRoot } from 'https://esm.sh/react-dom@19.1.0/client?deps=react@19.1.0';
+import htm from 'https://esm.sh/htm@3.1.1';
+
+const html = htm.bind(React.createElement);
+const CATEGORIES = ['клавиатуры', 'мыши', 'мониторы', 'кресла', 'наушники'];
+
+// --- та самая логика из поста: QUERY с fallback'ом на POST -------------------
+let queryBroken = false; // «сессионная память»: один раз не прошло — больше не пробуем
+
+async function search(filter, wafOn, log) {
+  const body = JSON.stringify(filter);
+  const headers = { 'Content-Type': 'application/json' };
+  if (wafOn) headers['X-Simulate-Waf'] = '1';
+
+  if (!queryBroken) {
+    const t0 = performance.now();
+    try {
+      const res = await fetch('/products/search', { method: 'QUERY', headers, body });
+      if (res.status !== 405) {
+        log({ method: 'QUERY', status: res.status, ms: performance.now() - t0, kind: 'ok' });
+        return res.json();
+      }
+      log({ method: 'QUERY', status: 405, ms: performance.now() - t0, kind: 'blocked',
+            note: 'Прокси зарезал QUERY → уходим в fallback и запоминаем на сессию' });
+    } catch {
+      log({ method: 'QUERY', status: 0, ms: performance.now() - t0, kind: 'blocked',
+            note: 'Сетевая ошибка на QUERY → уходим в fallback' });
+    }
+    queryBroken = true;
+  }
+
+  const t0 = performance.now();
+  const res = await fetch('/products/search', { method: 'POST', headers, body });
+  log({ method: 'POST', status: res.status, ms: performance.now() - t0, kind: 'fallback',
+        note: html`<b>fallback:</b> тот же фильтр, тот же эндпоинт, но POST` });
+  return res.json();
+}
+// -----------------------------------------------------------------------------
+
+function App() {
+  const [text, setText] = useState('');
+  const [cats, setCats] = useState([]);
+  const [maxPrice, setMaxPrice] = useState(1500);
+  const [waf, setWaf] = useState(false);
+  const [items, setItems] = useState(null);
+  const [entries, setEntries] = useState([]);
+  const timer = useRef(null);
+
+  const log = e => setEntries(prev => [{ ...e, id: Date.now() + Math.random(), at: new Date() }, ...prev].slice(0, 40));
+
+  useEffect(() => {
+    clearTimeout(timer.current);
+    timer.current = setTimeout(async () => {
+      const filter = { text: text || null, categories: cats.length ? cats : null, maxPrice };
+      const data = await search(filter, waf, log);
+      setItems(data.items ?? []);
+    }, 300);
+    return () => clearTimeout(timer.current);
+  }, [text, cats, maxPrice, waf]);
+
+  const toggleCat = c => setCats(p => p.includes(c) ? p.filter(x => x !== c) : [...p, c]);
+  const toggleWaf = () => { setWaf(w => { if (w) queryBroken = false; return !w; }); };
+
+  return html`
+    <div class="masthead">
+      <div class="kicker">RFC 10008 · .NET 10 · демо</div>
+      <h1>QUERY <span class="path">/products/search</span></h1>
+      <p class="sub">Фильтр уезжает на сервер <b>телом JSON</b>, а не query string'ом.
+        Метод safe и идемпотентный — как GET, только с телом. Дёргай фильтры и смотри
+        в лог справа: там видно, каким методом реально ушёл запрос.</p>
+    </div>
+    <div class="layout">
+      <div class="panel">
+        <div class="panel-head"><span>фильтр → тело запроса</span></div>
+        <div class="panel-body">
+          <div class="search-row">
+            <input type="text" placeholder="Поиск по названию…" value=${text} onInput=${e => setText(e.target.value)} />
+          </div>
+          <div class="chips">
+            ${CATEGORIES.map(c => html`
+              <span key=${c} class=${'chip' + (cats.includes(c) ? ' on' : '')} onClick=${() => toggleCat(c)}>${c}</span>`)}
+          </div>
+          <div class="price-row">
+            <label>Цена до</label>
+            <input type="range" min="50" max="1500" step="10" value=${maxPrice} onInput=${e => setMaxPrice(+e.target.value)} />
+            <span class="val">$${maxPrice}</span>
+          </div>
+          <div class=${'waf' + (waf ? ' on' : '')} onClick=${toggleWaf}>
+            <span class="light"></span>
+            <span class="t"><b>Симуляция злого прокси.</b> Включи — и «по дороге» встанет WAF,
+              который режет незнакомые методы. Фронт переживёт: сработает fallback на POST.</span>
+          </div>
+          <div class="results">
+            ${items === null ? html`<div class="empty">Загрузка…</div>`
+              : items.length === 0 ? html`<div class="empty">Ничего не нашлось — ослабь фильтр</div>`
+              : items.map(p => html`
+                <div key=${p.name} class="card">
+                  <div class="cat">${p.category}</div>
+                  <div class="name">${p.name}</div>
+                  <div class="price">$${p.price}</div>
+                </div>`)}
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><span>wire log</span><span>${entries.length}</span></div>
+        <div class="log">
+          ${entries.length === 0 ? html`<div class="log-empty">// запросов пока не было</div>` : ''}
+          ${entries.map(e => html`
+            <div key=${e.id} class=${'entry ' + e.kind}>
+              <span class=${'badge ' + e.method}>${e.method}</span>
+              <span class="meta">/products/search · ${e.at.toLocaleTimeString()}</span>
+              <span class=${'status s' + e.status}>${e.status === 0 ? 'ERR' : e.status} · ${Math.round(e.ms)}ms</span>
+              ${e.note ? html`<span class="note">${e.note}</span>` : ''}
+            </div>`)}
+        </div>
+      </div>
+    </div>`;
+}
+
+createRoot(document.getElementById('root')).render(html`<${App} />`);
+</script>
+</body>
+</html>
